@@ -45,9 +45,12 @@ list_items = ply_by_ply_html[0].findAll("li")
 PBP_Minute = []
 PBP_Event = []
 PBP_Team = []
+min = ""
 
 for tag in list_items:
-    PBP_Minute.insert(0, tag.find("span").text)
+    min = tag.find("span").text
+    min = min.replace("'","")
+    PBP_Minute.insert(0, min)
     PBP_Event.insert(0, tag.find("h3").text)
     
     player_team = tag.find("p").text
@@ -64,6 +67,7 @@ df = pd.DataFrame({Headings[1].text:Event,Headings[0].text:H_Team,Headings[2].te
 df.to_excel(writer,sheet_name='Game Stats',columns=[Headings[1].text,Headings[0].text,Headings[2].text],index=False)
 
 df2 = pd.DataFrame({"Minute":PBP_Minute, "Event":PBP_Event, "Team":PBP_Team})
+
 df2.to_excel(writer, sheet_name='Play by Play', columns=["Minute", "Event", "Team"], index=False)
 
 writer.save()
